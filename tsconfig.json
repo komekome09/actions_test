@@ -13,7 +13,7 @@
         "target": "es2019",
         "sourceMap": true,
         "esModuleInterop": true,
-        "resoulveJsonModule": true
+        "resolveJsonModule": true
     },
     "files": [
         "index.ts"
