@@ -9,9 +9,14 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
+        uses: actions/setup-node@v1
+        run: npm install
+        run: ./node_modules/.bin/tsc -p .
       - name: Hello world action step
         uses: ./ # Uses an action in the root directory
         id: hello
+        uses: actions/haneda_departures@master
+        uses: ./
         with:
           who-to-greet: 'Mona the Octocat'
       # Use the output from the `hello` step
