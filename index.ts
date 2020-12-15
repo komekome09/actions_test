@@ -7,6 +7,7 @@ var lastX = context.canvas.width * Math.random();
 var lastY = context.canvas.height * Math.random();
 var hue = 0;
 
+const range = (begin: number, end: number) => ([...Array(end - begin)].map((_, i) => (begin + i)));
 
 function line(){
     if(context === null) return;
@@ -35,14 +36,16 @@ function line(){
 
 function row_lines() {
     if(context === null) return;
-    context.save();
-    context.beginPath();
-    context.lineWidth = 1;
-    context.moveTo(0, 50);
-    context.lineTo(context.canvas.width, 50);
-    context.strokeStyle = 'rgb(179, 179, 179)';
-    context.stroke();
-    context.restore();
+    for (var i of range(1, context.canvas.height/50 + 1)) {
+        context.save();
+        context.beginPath();
+        context.lineWidth = 1;
+        context.moveTo(0, 50*i);
+        context.lineTo(context.canvas.width, 50*i);
+        context.strokeStyle = 'rgb(179, 179, 179)';
+        context.stroke();
+        context.restore();
+    }
 }
 
 function background() {
