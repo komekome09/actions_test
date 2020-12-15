@@ -27,12 +27,27 @@ function line() {
     context.stroke();
     context.restore();
 }
-setInterval(line, 50);
-function blank() {
+function row_lines() {
     if (context === null)
         return;
-    context.fillStyle = 'rgba(0, 0, 0, 1)';
+    context.save();
+    context.beginPath();
+    context.lineWidth = 1;
+    context.moveTo(0, 50);
+    context.lineTo(context.canvas.width, 50);
+    context.strokeStyle = 'rgb(179, 179, 179)';
+    context.stroke();
+    context.restore();
+}
+function background() {
+    if (context === null)
+        return;
+    context.fillStyle = 'rgba(15, 15, 15, 1)';
     context.fillRect(0, 0, context.canvas.width, context.canvas.height);
 }
-setInterval(blank, 40);
+function draw() {
+    background();
+    row_lines();
+}
+setInterval(draw, 50);
 //# sourceMappingURL=index.js.map
