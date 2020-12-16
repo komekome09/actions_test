@@ -48,6 +48,25 @@ function row_lines() {
     }
 }
 
+function draw_text() {
+    if(context === null) return;
+    context.font = "30px 'M PLUS Rounded 1c'";
+    context.textAlign = "left";
+    context.textBaseline = "middle";
+    context.fillStyle = "rgb(200, 200, 200)";
+
+    var columnData = [{x: 10, name: "定刻"}, {x: 100, name: "変更"}, {x: 190, name: "行先"}, 
+        {x: 280, name: "便名"}, {x: 370, name: "ターミナル"}, {x: 530, name: "搭乗口"}, 
+        {x: 630, name: "運行状況"}];
+
+    context.fillText("出発 Departures", 10, 30);
+
+    for(const value of columnData){
+        context.fillText(value.name, value.x, 30+50);
+        context.fillText("21:30", value.x, 30+50*2);
+    }
+}
+
 function background() {
     if(context === null) return;
     context.fillStyle = 'rgba(15, 15, 15, 1)';
@@ -57,5 +76,6 @@ function background() {
 function draw() {
     background();
     row_lines();
+    draw_text();
 }
 setInterval(draw, 50);
