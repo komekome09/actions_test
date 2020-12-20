@@ -58,20 +58,14 @@ setInterval(draw, 50);
 function get_data(){
     console.log("hi");
     const proxy = 'https://cors-anywhere.herokuapp.com/';
-    //const url = proxy + 'https://tokyo-haneda.com/';
-    //const url = 'https://tokyo-haneda.com/flight/flightInfo_dms.html';
     const url = proxy + 'https://tokyo-haneda.com/app_resource/flight/data/dms/hdacfdep.json';
 
     const AxiosInstance = axios.create();
-    AxiosInstance.get(url, {
-        headers: {
-            'Content-Type': 'text/html;charset=UTF-8',
-        }
-    })
+    AxiosInstance.get(url)
     .then(
         response => {
-            const html = response.data;
-            console.log(html);
+            const json = response.data;
+            console.log(json);
         }
     )
     .catch(console.error);
