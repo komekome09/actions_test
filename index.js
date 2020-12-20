@@ -1,33 +1,11 @@
+import axios from 'axios';
 var canvasElem = document.getElementsByTagName('canvas');
 if (canvasElem === null)
     throw new Error('Cannot get element "canvas"');
 var context = canvasElem[0].getContext('2d');
 if (context === null)
     throw new Error('Cannot get context');
-var lastX = context.canvas.width * Math.random();
-var lastY = context.canvas.height * Math.random();
-var hue = 0;
 const range = (begin, end) => ([...Array(end - begin)].map((_, i) => (begin + i)));
-function line() {
-    if (context === null)
-        return;
-    context.save();
-    context.translate(context.canvas.width / 2, context.canvas.height / 2);
-    context.scale(0.9, 0.9);
-    context.translate(-context.canvas.width / 2, -context.canvas.height / 2);
-    context.beginPath();
-    context.lineWidth = 5 + Math.random() * 10;
-    context.moveTo(lastX, lastY);
-    lastX = context.canvas.width * Math.random();
-    lastY = context.canvas.height * Math.random();
-    context.bezierCurveTo(context.canvas.width * Math.random(), context.canvas.height * Math.random(), context.canvas.width * Math.random(), context.canvas.height * Math.random(), lastX, lastY);
-    hue = hue + 10 * Math.random();
-    context.strokeStyle = 'hsl(' + hue + ', 50%, 50%)';
-    context.shadowColor = 'white';
-    context.shadowBlur = 10;
-    context.stroke();
-    context.restore();
-}
 function row_lines() {
     if (context === null)
         return;
@@ -42,6 +20,23 @@ function row_lines() {
         context.restore();
     }
 }
+function draw_text() {
+    if (context === null)
+        return;
+    context.font = "30px 'M PLUS Rounded 1c'";
+    context.textAlign = "left";
+    context.textBaseline = "middle";
+    context.fillStyle = "rgb(200, 200, 200)";
+    var columnData = [{ x: 10, name: "定刻" }, { x: 100, name: "変更" }, { x: 190, name: "行先" },
+        { x: 370, name: "" }, { x: 500, name: "便名" }, { x: 620, name: "ターミナル" }, { x: 780, name: "搭乗口" },
+        { x: 880, name: "運行状況" }];
+    var testData = ["21:30", "22:00", "札幌(新千歳)", "Sapporo", "NH3848", "1", "17", "搭乗手続中"];
+    context.fillText("出発 Departures", 10, 30);
+    for (const [key, value] of columnData.entries()) {
+        context.fillText(value.name, value.x, 30 + 50);
+        context.fillText(testData[key], value.x, 30 + 50 * 2);
+    }
+}
 function background() {
     if (context === null)
         return;
@@ -51,6 +46,26 @@ function background() {
 function draw() {
     background();
     row_lines();
+    draw_text();
 }
 setInterval(draw, 50);
+function get_data() {
+    console.log("hi");
+    const proxy = 'https://cors-anywhere.herokuapp.com/';
+    //const url = proxy + 'https://tokyo-haneda.com/';
+    //const url = 'https://tokyo-haneda.com/flight/flightInfo_dms.html';
+    const url = proxy + 'https://tokyo-haneda.com/app_resource/flight/data/dms/hdacfdep.json';
+    const AxiosInstance = axios.create();
+    AxiosInstance.get(url, {
+        headers: {
+            'Content-Type': 'text/html;charset=UTF-8',
+        }
+    })
+        .then(response => {
+        const html = response.data;
+        console.log(html);
+    })
+        .catch(console.error);
+}
+get_data();
 //# sourceMappingURL=index.js.map
