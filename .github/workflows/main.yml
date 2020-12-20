@@ -10,6 +10,7 @@ jobs:
             - uses: actions/setup-node@v1
             - run: npm install
             - run: ./node_modules/.bin/tsc -p .
+            - run: ./node_modules/.bin/webpack 
             - run: cp index.html docs 
             - uses: peaceiris/actions-gh-pages@v3
               with:
