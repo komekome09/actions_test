@@ -52,18 +52,26 @@ setInterval(draw, 50);
 function get_data() {
     console.log("hi");
     const proxy = 'https://cors-anywhere.herokuapp.com/';
-    //const url = proxy + 'https://tokyo-haneda.com/';
-    //const url = 'https://tokyo-haneda.com/flight/flightInfo_dms.html';
     const url = proxy + 'https://tokyo-haneda.com/app_resource/flight/data/dms/hdacfdep.json';
     const AxiosInstance = axios.create();
-    AxiosInstance.get(url, {
-        headers: {
-            'Content-Type': 'text/html;charset=UTF-8',
-        }
-    })
+    AxiosInstance.get(url)
         .then(response => {
-        const html = response.data;
-        console.log(html);
+        const json = response.data;
+        console.log(json);
+        for (var i of json.flight_info) {
+            var timeEst = new Date(i.定刻).getTime();
+            var timeChn = new Date(i.変更時刻).getTime();
+            var timeRea = 0;
+            if (timeChn === NaN)
+                timeRea = timeEst;
+            else
+                timeRea = timeEst;
+            var nowTime = new Date().getTime();
+            if (timeRea < nowTime)
+                continue;
+            var flightData = [i.定刻, i.変更時刻, i.行先地空港和名称, i.行先地空港英名称, i.航空会社[0].ＡＬコード + i.航空会社[0].便名, i.ターミナル区分, i.ゲート和名称, i.備考和名称];
+            console.log(flightData);
+        }
     })
         .catch(console.error);
 }
