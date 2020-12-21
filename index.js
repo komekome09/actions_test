@@ -30,6 +30,16 @@ let columnIndex = {
     gate: 780,
     flight_status: 880
 };
+let columnDesc_JP = {
+    on_time: "定刻",
+    change_time: "変更",
+    destination_jp: "行先",
+    destination_en: "",
+    flight_number: "便名",
+    terminal: "ターミナル",
+    gate: "搭乗口",
+    flight_status: "運行状況"
+};
 let flightsData = [];
 function draw_text() {
     if (context === null)
@@ -38,16 +48,11 @@ function draw_text() {
     context.textAlign = "left";
     context.textBaseline = "middle";
     context.fillStyle = "rgb(200, 200, 200)";
-    let columnData = [{ x: 10, name: "定刻" }, { x: 100, name: "変更" }, { x: 190, name: "行先" },
-        { x: 370, name: "" }, { x: 500, name: "便名" }, { x: 620, name: "ターミナル" }, { x: 780, name: "搭乗口" },
-        { x: 880, name: "運行状況" }];
     context.fillText("出発 Departures", 10, 30);
-    for (const value of columnData) {
-        context.fillText(value.name, value.x, 30 + 50);
-    }
-    for (const [key, value] of flightsData.slice(-14).entries()) {
-        console.log(key + "|" + value, columnIndex.on_time);
-    }
+    const indexMap = new Map(Object.entries(columnIndex));
+    const descMap = new Map(Object.entries(columnDesc_JP));
+    indexMap.size;
+    descMap.size;
 }
 function add_flightData(flightData) {
     if (flightData === null)
@@ -65,7 +70,7 @@ function draw() {
     row_lines();
     draw_text();
 }
-setInterval(draw, 50);
+setInterval(draw, 5000);
 function get_data() {
     const proxy = 'https://blooming-lowlands-21185.herokuapp.com/';
     const base_url = 'https://tokyo-haneda.com/app_resource/flight/data/';
