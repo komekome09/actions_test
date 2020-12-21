@@ -68,9 +68,12 @@ function draw() {
 setInterval(draw, 50);
 function get_data() {
     const proxy = 'https://blooming-lowlands-21185.herokuapp.com/';
-    const url = proxy + 'https://tokyo-haneda.com/app_resource/flight/data/dms/hdacfdep.json';
+    const base_url = 'https://tokyo-haneda.com/app_resource/flight/data/';
+    const filename = 'hdacfdep.json';
+    const url_dms = proxy + base_url + 'dms/' + filename;
+    //const url_int = proxy + base_url + 'int/' + filename;
     const AxiosInstance = axios.create();
-    AxiosInstance.get(url)
+    AxiosInstance.get(url_dms)
         .then(response => {
         const json = response.data;
         console.log(json);
