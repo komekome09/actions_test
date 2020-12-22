@@ -110,6 +110,14 @@ function draw() {
 }
 setInterval(draw, 5000);
 
+function paddingDigits(num: number): string{
+    let numstr = num + "";
+    if(numstr.length === 1){
+        numstr = "0" + numstr;
+    }
+    return numstr;
+}
+
 function get_data(){
     const proxy = 'https://blooming-lowlands-21185.herokuapp.com/';
     const base_url = 'https://tokyo-haneda.com/app_resource/flight/data/';
@@ -137,18 +145,30 @@ function get_data(){
                 else timeRea = timeEst;
                 let nowTime = new Date().getTime();
 
-                if(timeRea < nowTime && false) continue;
+                if(timeRea < nowTime) continue;
 
+                let onTime_Date = new Date(i.定刻);
+                let onTime_Hours = onTime_Date.getHours();
+                let onTime_Minutes = onTime_Date.getMinutes();
+                let onTime_str = paddingDigits(onTime_Hours) + ":" + paddingDigits(onTime_Minutes);
+
+                let chTime_Date = new Date(i.変更時刻);
+                let chTime_Hours = chTime_Date.getHours();
+                let chTime_Minutes = chTime_Date.getMinutes();
+                let chTime_str = "";
+                if(!isNaN(chTime_Hours) && !isNaN(chTime_Minutes)){
+                    chTime_str = paddingDigits(chTime_Hours) + ":" + paddingDigits(chTime_Minutes);
+                }
                 let flightData: FlightData = {
-                    on_time: i.定刻,
-                    change_time: i.変更時刻, 
+                    on_time: onTime_str,
+                    change_time: chTime_str, 
                     destination_jp: i.行先地空港和名称,
                     destination_en: i.行先地空港英名称,
                     flight_number: i.航空会社[0].ＡＬコード + i.航空会社[0].便名,
                     terminal: i.ターミナル区分,
                     gate: i.ゲート和名称,
                     flight_status: i.備考和名称};
-                console.log(flightData);
+                //console.log(flightData);
                 add_flightData(flightData);
             }
         }
