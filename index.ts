@@ -31,18 +31,18 @@ type FlightData = {
     terminal: string | number,
     gate: string | number,
     flight_status: string | number,
-    [key: string]: string | number
+    [key: number]: string | number
 }
 
 let columnIndex: FlightData = {
     on_time: 10,
-    change_time: 100,
-    destination_jp: 190,
-    destination_en: 370,
-    flight_number: 500,
-    terminal: 620,
-    gate: 780,
-    flight_status: 880
+    change_time: 110,
+    destination_jp: 200,
+    destination_en: 400,
+    flight_number: 560,
+    terminal: 700,
+    gate: 860,
+    flight_status: 960
 }
 
 let columnDesc_JP: FlightData = {
@@ -70,8 +70,26 @@ function draw_text() {
     const indexMap = new Map(Object.entries(columnIndex));
     const descMap = new Map(Object.entries(columnDesc_JP));
 
-    indexMap.size;
-    descMap.size;
+    for(const key of indexMap.keys()){
+        const str = descMap.get(key);
+        const idx = indexMap.get(key);
+        if(typeof str !== 'undefined' && typeof str !== 'number' && typeof idx !== 'undefined' && typeof idx !== 'string'){
+            context.fillText(str, idx, 30+50);
+        }
+    }
+
+    const columnMax = 16;
+    const list = flightsData.slice(0, columnMax);
+    for(let i = 0; i < columnMax; i++){
+        const lmap = new Map(Object.entries(list[i]));
+        for(const key of indexMap.keys()){
+            const str = lmap.get(key);
+            const idx = indexMap.get(key);
+            if(typeof str !== 'undefined' && typeof str !== 'number' && typeof idx !== 'undefined' && typeof idx !== 'string'){
+                context.fillText(str, idx, 30+50*(i+2));
+            }
+        }
+    }
 }
 
 function add_flightData(flightData: FlightData): void{
