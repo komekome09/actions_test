@@ -22,13 +22,13 @@ function row_lines() {
 }
 let columnIndex = {
     on_time: 10,
-    change_time: 100,
-    destination_jp: 190,
-    destination_en: 370,
-    flight_number: 500,
-    terminal: 620,
-    gate: 780,
-    flight_status: 880
+    change_time: 110,
+    destination_jp: 200,
+    destination_en: 400,
+    flight_number: 560,
+    terminal: 700,
+    gate: 860,
+    flight_status: 960
 };
 let columnDesc_JP = {
     on_time: "定刻",
@@ -51,8 +51,25 @@ function draw_text() {
     context.fillText("出発 Departures", 10, 30);
     const indexMap = new Map(Object.entries(columnIndex));
     const descMap = new Map(Object.entries(columnDesc_JP));
-    indexMap.size;
-    descMap.size;
+    for (const key of indexMap.keys()) {
+        const str = descMap.get(key);
+        const idx = indexMap.get(key);
+        if (typeof str !== 'undefined' && typeof str !== 'number' && typeof idx !== 'undefined' && typeof idx !== 'string') {
+            context.fillText(str, idx, 30 + 50);
+        }
+    }
+    const columnMax = 16;
+    const list = flightsData.slice(0, columnMax);
+    for (let i = 0; i < columnMax; i++) {
+        const lmap = new Map(Object.entries(list[i]));
+        for (const key of indexMap.keys()) {
+            const str = lmap.get(key);
+            const idx = indexMap.get(key);
+            if (typeof str !== 'undefined' && typeof str !== 'number' && typeof idx !== 'undefined' && typeof idx !== 'string') {
+                context.fillText(str, idx, 30 + 50 * (i + 2));
+            }
+        }
+    }
 }
 function add_flightData(flightData) {
     if (flightData === null)
@@ -71,6 +88,13 @@ function draw() {
     draw_text();
 }
 setInterval(draw, 5000);
+function paddingDigits(num) {
+    let numstr = num + "";
+    if (numstr.length === 1) {
+        numstr = "0" + numstr;
+    }
+    return numstr;
+}
 function get_data() {
     const proxy = 'https://blooming-lowlands-21185.herokuapp.com/';
     const base_url = 'https://tokyo-haneda.com/app_resource/flight/data/';
@@ -95,11 +119,22 @@ function get_data() {
             else
                 timeRea = timeEst;
             let nowTime = new Date().getTime();
-            if (timeRea < nowTime && false)
+            if (timeRea < nowTime)
                 continue;
+            let onTime_Date = new Date(i.定刻);
+            let onTime_Hours = onTime_Date.getHours();
+            let onTime_Minutes = onTime_Date.getMinutes();
+            let onTime_str = paddingDigits(onTime_Hours) + ":" + paddingDigits(onTime_Minutes);
+            let chTime_Date = new Date(i.変更時刻);
+            let chTime_Hours = chTime_Date.getHours();
+            let chTime_Minutes = chTime_Date.getMinutes();
+            let chTime_str = "";
+            if (!isNaN(chTime_Hours) && !isNaN(chTime_Minutes)) {
+                chTime_str = paddingDigits(chTime_Hours) + ":" + paddingDigits(chTime_Minutes);
+            }
             let flightData = {
-                on_time: i.定刻,
-                change_time: i.変更時刻,
+                on_time: onTime_str,
+                change_time: chTime_str,
                 destination_jp: i.行先地空港和名称,
                 destination_en: i.行先地空港英名称,
                 flight_number: i.航空会社[0].ＡＬコード + i.航空会社[0].便名,
@@ -107,7 +142,7 @@ function get_data() {
                 gate: i.ゲート和名称,
                 flight_status: i.備考和名称
             };
-            console.log(flightData);
+            //console.log(flightData);
             add_flightData(flightData);
         }
     })
