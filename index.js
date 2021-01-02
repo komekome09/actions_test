@@ -25,10 +25,10 @@ let columnIndex = {
     change_time: 110,
     destination_jp: 200,
     destination_en: 400,
-    flight_number: 560,
-    terminal: 700,
-    gate: 860,
-    flight_status: 960
+    flight_number: 660,
+    terminal: 800,
+    gate: 960,
+    flight_status: 1060
 };
 let columnDesc_JP = {
     on_time: "定刻",
